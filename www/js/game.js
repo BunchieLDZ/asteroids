@@ -8,7 +8,6 @@ class Game {
         this.icanvas.width = this.game_canvas.width;
         this.icanvas.height = this.game_canvas.height;
         this.ictx = this.icanvas.getContext("2d");
-        this.restart_button = document.getElementById("restart_button");
         this.victory = false;
         this.defeat = false;
         this.defeat_screen = false;
@@ -18,7 +17,7 @@ class Game {
         this.scene = new Scene("img/background.jpg", 0, 0, 0, 0, 100, 800, 400);
         this.asteroids_generator = new AsteroidGenerator(500, 1200, 33, -10, this.game_canvas.height, this.game_canvas.width);
         console.log("Generator: ", this.asteroids_generator);
-        this.vjoy = new VJoy(50, 50, 50, this.ui_canvas, "green");
+        this.vjoy = new VJoy(50, 350, 50, this.game_canvas, "green");
         this.gameobjects = [];
         this.ongoingTouches = [];
         window.requestAnimationFrame(this.animation.bind(this));
@@ -56,15 +55,11 @@ class Game {
         this.playerobject = new Player(this.game_canvas.width / 2, this.game_canvas.height / 2, 0, 0, 0.5, 112, 96, "img/ufo.png", "img/ufo_damaged.png", 120);
         this.playerobject.health = 100;
         this.asteroids_generator.asteroids = [];
-        this.vjoy = new VJoy(50, 50, 50, this.ui_canvas, "green");
-    }
-    prepare_restart_button() {
-        this.restart_button.addEventListener("click", this.restart);
+        this.vjoy = new VJoy(50, 50, 50, this.game_canvas, "green");
     }
     initialize_UI() {
         console.log("UI STWORZONE");
         this.initialize_touch();
-        this.prepare_restart_button();
         this.uiobjects.push(this.vjoy);
     }
     start_touch(evt) {
@@ -101,10 +96,10 @@ class Game {
         }
     }
     initialize_touch() {
-        this.ui_canvas.addEventListener("touchend", this.start_touch.bind(this), false);
-        this.ui_canvas.addEventListener("touchend", this.end_touch, false);
-        this.ui_canvas.addEventListener("touchcancel", this.cancel_touch, false);
-        this.ui_canvas.addEventListener("touchmove", this.move_touch.bind(this), false);
+        this.game_canvas.addEventListener("touchend", this.start_touch.bind(this), false);
+        this.game_canvas.addEventListener("touchend", this.end_touch, false);
+        this.game_canvas.addEventListener("touchcancel", this.cancel_touch, false);
+        this.game_canvas.addEventListener("touchmove", this.move_touch.bind(this), false);
     }
     calculate_number_of_objects(gameobjects) {
         return gameobjects.length;
@@ -131,7 +126,6 @@ class Game {
         this.game_ctx.fillStyle = "white"; 
         this.game_ctx.fillText("Your score: ", (this.game_canvas.width / 2) - 60, this.game_canvas.height / 2 + 40);
         this.game_ctx.fillText(this.score, (this.game_canvas.width / 2) + 95, this.game_canvas.height / 2 + 40);
-        this.restart_button.style.visibility = "visible";
     }
     evaluate_defeat() {
         if(this.playerobject.health == 0) {
@@ -286,10 +280,10 @@ class Game {
         console.log("PRZEGRANA");  
     }
     draw_score() {
-        this.ui_ctx.font= "30px Arial";
-        this.ui_ctx.fillStyle = "black";
-        this.ui_ctx.fillText("SCORE", this.ui_canvas.width * 0.80, 30);
-        this.ui_ctx.fillText(this.score, this.ui_canvas.width * 0.85, 65);
+        this.game_ctx.font= "30px Arial";
+        this.game_ctx.fillStyle = "white";
+        this.game_ctx.fillText("SCORE", this.ui_canvas.width * 0.80, 30);
+        this.game_ctx.fillText(this.score, this.ui_canvas.width * 0.85, 65);
     }
     add_score() {
         this.score+=10;
@@ -308,7 +302,7 @@ class Game {
             //console.log(gameobjects[i].width);
         }
         for(var i = 0; i < this.calculate_number_of_objects(this.uiobjects); i++) {
-            this.uiobjects[i].draw(this.ui_ctx);
+            this.uiobjects[i].draw(this.game_ctx);
         }
     
         for(var i = 0; i < this.asteroids_generator.calculate_number_of_asteroids(); i++) {
@@ -327,7 +321,7 @@ class Game {
             }
         }
         this.playerobject.draw(this.game_ctx);
-        this.playerobject.draw_health_bar(this.ui_ctx);
+        this.playerobject.draw_health_bar(this.game_ctx);
         //game.context.clearRect(0, 0, game.canvas.width, game.canvas.height);
         window.requestAnimationFrame(this.animation.bind(this));
     }

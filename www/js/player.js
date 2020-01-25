@@ -78,7 +78,7 @@ class Player extends GameObject {
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = "green";
-        ctx.rect(ctx.canvas.width / 4, 40, this.health * 4, 30);
+        ctx.rect(ctx.canvas.width / 4, ctx.canvas.height * 0.9, this.health * 4, 30);
         ctx.fill();
         ctx.restore();
     }
