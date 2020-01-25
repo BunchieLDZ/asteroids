@@ -14,7 +14,7 @@ class Game {
         this.defeat_screen = false;
         this.score = 0;
         this.uiobjects = [];
-        this.playerobject = new Player(this.game_canvas.width / 2, this.game_canvas.height / 2, 0, 0, 0.5, 112, 96, "img/ufo.png", 120);
+        this.playerobject = new Player(this.game_canvas.width / 2, this.game_canvas.height / 2, 0, 0, 0.5, 112, 96, "img/ufo.png", "img/ufo_damaged.png", 120);
         this.scene = new Scene("img/background.jpg", 0, 0, 0, 0, 100, 800, 400);
         this.asteroids_generator = new AsteroidGenerator(500, 1200, 33, -10, this.game_canvas.height, this.game_canvas.width);
         console.log("Generator: ", this.asteroids_generator);
@@ -29,7 +29,6 @@ class Game {
         this.initialize_game();
         this.playerobject.back_to_mortality();
         this.update();
-        console.log(this.playerobject.image.src);
     }
     restart() {
         console.log(window.game);
@@ -54,7 +53,7 @@ class Game {
         this.defeat_screen = false;
         this.victory = false;
         this.score = 0;
-        this.playerobject = new Player(this.game_canvas.width / 2, this.game_canvas.height / 2, 0, 0, 0.5, 112, 96, "img/ufo.png", 120);
+        this.playerobject = new Player(this.game_canvas.width / 2, this.game_canvas.height / 2, 0, 0, 0.5, 112, 96, "img/ufo.png", "img/ufo_damaged.png", 120);
         this.playerobject.health = 100;
         this.asteroids_generator.asteroids = [];
         this.vjoy = new VJoy(50, 50, 50, this.ui_canvas, "green");
