@@ -1,9 +1,7 @@
 class Game {
     constructor() {
         this.game_canvas = document.getElementById("myCanvas");
-        this.ui_canvas = document.getElementById("uiCanvas");
         this.game_ctx = this.game_canvas.getContext("2d");
-        this.ui_ctx = this.ui_canvas.getContext("2d");
         this.icanvas = document.createElement("canvas");
         this.icanvas.width = this.game_canvas.width;
         this.icanvas.height = this.game_canvas.height;
@@ -48,6 +46,7 @@ class Game {
         this.start();
     }
     reset_state() {
+        this.clearIntervals();
         this.defeat = false;
         this.defeat_screen = false;
         this.victory = false;
@@ -55,12 +54,20 @@ class Game {
         this.playerobject = new Player(this.game_canvas.width / 2, this.game_canvas.height / 2, 0, 0, 0.5, 112, 96, "img/ufo.png", "img/ufo_damaged.png", 120);
         this.playerobject.health = 100;
         this.asteroids_generator.asteroids = [];
-        this.vjoy = new VJoy(50, 50, 50, this.game_canvas, "green");
+        this.vjoy = new VJoy(50, 350, 50, this.game_canvas, "green");
+    }
+    clearIntervals() {
+        clearInterval(this.asteroid_releaser);
+        clearInterval(this.score_adder);
     }
     initialize_UI() {
+       // this.game_canvas.width = window.innerWidth;
+       // this.game_canvas.health = window.innerHeight;
+        //this.game_canvas.style.position = 'absolute';
         console.log("UI STWORZONE");
         this.initialize_touch();
         this.uiobjects.push(this.vjoy);
+        console.log(this.game_canvas.offsetHeight, this.game_canvas.offsetWidth);
     }
     start_touch(evt) {
         evt.preventDefault();
@@ -144,11 +151,11 @@ class Game {
         console.log("Gra zainicjowana!");
         setInterval(this.evaluate_victory, 3000);
         setInterval(this.evaluate_defeat.bind(this), 2000);
-        setInterval(this.add_score.bind(this), 1000);
+        this.score_adder = setInterval(this.add_score.bind(this), 1000);
     }
     initialize_asteroids() {
         this.prepare_asteroids();
-        setInterval(this.fire_asteroid.bind(this), this.asteroids_generator.generation_interval);
+        this.asteroid_releaser = setInterval(this.fire_asteroid.bind(this), this.asteroids_generator.generation_interval);
     }
     distance_between(obj1, obj2) {
         return Math.sqrt(Math.pow(obj1.x - obj2.x, 2) +Math.pow(obj1.y - obj2.y, 2));
@@ -282,15 +289,14 @@ class Game {
     draw_score() {
         this.game_ctx.font= "30px Arial";
         this.game_ctx.fillStyle = "white";
-        this.game_ctx.fillText("SCORE", this.ui_canvas.width * 0.80, 30);
-        this.game_ctx.fillText(this.score, this.ui_canvas.width * 0.85, 65);
+        this.game_ctx.fillText("SCORE", this.game_canvas.width * 0.80, 30);
+        this.game_ctx.fillText(this.score, this.game_canvas.width * 0.85, 65);
     }
     add_score() {
         this.score+=10;
     }
     animation() {
         this.game_ctx.clearRect(0, 0, this.game_canvas.width, this.game_canvas.height);
-        this.ui_ctx.clearRect(0, 0, this.ui_canvas.width, this.ui_canvas.height);
         this.scene.draw(this.game_ctx);
         this.draw_score();
         if(this.defeat == true && this.defeat_screen == false) {

@@ -1,5 +1,5 @@
 class Player extends GameObject {
-    constructor(x, y, dx, dy, speed, width, height, image, timeout) {
+    constructor(x, y, dx, dy, speed, width, height, image_normal, image_dmged, timeout) {
         super(x, y, dx, dy, timeout);
         this.radiusX = 20;
         this.radiusY = 75;
@@ -12,9 +12,12 @@ class Player extends GameObject {
         this.bbx2 = this.x + this.width;
         this.bby2 = this.y + this.height;
         this.health = 100;
-        this.image = new Image(this.width, this.height);   
-        this.image.src = image;
-        this.image.crossOrigin = 'anonymous'; 
+        this.image_normal = new Image(this.width, this.height);   
+        this.image_normal.src = image_normal;
+        this.image_normal.crossOrigin = 'anonymous'; 
+        this.image_dmged = new Image(this.width, this.height);
+        this.image_dmged.src = image_dmged;
+        this.image_dmged.crossOrigin = 'anonymous';
         this.on_hit_sound = new Audio();
         this.on_hit_sound.src = "audio/hit.wav"
         this.on_hit_sound.muted = true;
@@ -22,6 +25,8 @@ class Player extends GameObject {
         this.is_immune = false;
         this.canvas_width = document.getElementById("myCanvas").width;
         this.canvas_height = document.getElementById("myCanvas").height;
+        console.log(this.image_dmged.src);
+        console.log(this.image_normal.src);
     }
     draw(ctx) {
         ctx.save();
@@ -35,7 +40,14 @@ class Player extends GameObject {
         ctx.ellipse(this.x, this.y-20, this.radiusX + 20, this.radiusY - 35, Math.PI, 0, Math.PI);
         ctx.stroke(); */ // old version of UFO
         //ctx.globalAlpha=0.62;
-            ctx.drawImage(this.image, this.x - this.width /2 , this.y - this.height / 2 , this.width, this.height);
+        if(this.is_immune == false)
+        {
+            ctx.drawImage(this.image_normal, this.x - this.width /2 , this.y - this.height / 2 , this.width, this.height);
+        }
+        else if(this.is_immune == true) {
+            ctx.drawImage(this.image_dmged, this.x - this.width /2 , this.y - this.height / 2 , this.width, this.height);
+        }
+            
      
 
       /*  ctx.beginPath();
@@ -66,7 +78,7 @@ class Player extends GameObject {
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = "green";
-        ctx.rect(ctx.canvas.width / 4, 40, this.health * 4, 30);
+        ctx.rect(ctx.canvas.width / 4, ctx.canvas.height * 0.9, this.health * 4, 30);
         ctx.fill();
         ctx.restore();
     }
@@ -104,7 +116,6 @@ class Player extends GameObject {
         if(this.is_immune == false) {
         this.health = this.health - 10; 
         this.is_immune = true;
-        this.image.src = "res/ufo_damaged.png";
         //this.on_hit_sound.play();
         }
     }
@@ -113,7 +124,6 @@ class Player extends GameObject {
     }
     make_immune_again() {
         if(this.is_immune == true) {
-        this.image.src = "res/ufo.png";
         this.is_immune = false;
         }
     }

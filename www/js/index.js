@@ -28,6 +28,9 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+        screen.orientation.lock('landscape');
+        window.plugins.screensize.get(successCallback, errorCallback);
+        console.log("Orientation:" + screen.orientation);
     },
 
     // Update DOM on a Received Event
@@ -40,7 +43,13 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    }
+    },
+
+    successCallback(result) {
+        console.log(result);
+      }
+
+    
 };
 
 app.initialize();

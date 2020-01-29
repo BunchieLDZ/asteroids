@@ -4,7 +4,13 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <name>HelloCordova</name>
+    <feature name="CDVOrientation">
+        <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation" />
+    </feature>
+    <feature name="ScreenSize">
+        <param name="android-package" value="com.pbakondy.ScreenSize" />
+    </feature>
+    <name>Asteroids!</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -21,4 +27,6 @@
     <allow-intent href="geo:*" />
     <allow-intent href="market:*" />
     <preference name="loglevel" value="DEBUG" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="Orientation" value="landscape" />
 </widget>
