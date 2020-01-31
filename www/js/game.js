@@ -280,12 +280,6 @@ class Game {
         //}
         }
     }
-    on_player_hit() {
-        this.game_ctx.font = "30px Arial";
-        this.game_ctx.fillStyle = "white";
-        this.game_ctx.fillText("You lose!", (this.game_canvas.width / 2) - 30, this.game_canvas.height / 2);  
-        console.log("PRZEGRANA");  
-    }
     draw_score() {
         this.game_ctx.font= "30px Arial";
         this.game_ctx.fillStyle = "white";
@@ -299,6 +293,9 @@ class Game {
         this.game_ctx.clearRect(0, 0, this.game_canvas.width, this.game_canvas.height);
         this.scene.draw(this.game_ctx);
         this.draw_score();
+        for(var i = 0; i < this.calculate_number_of_objects(this.uiobjects); i++) {
+            this.uiobjects[i].draw(this.game_ctx);
+        }
         if(this.defeat == true && this.defeat_screen == false) {
             this.draw_defeat();
             return;
@@ -307,10 +304,6 @@ class Game {
             this.gameobjects[i].draw(this.game_ctx);
             //console.log(gameobjects[i].width);
         }
-        for(var i = 0; i < this.calculate_number_of_objects(this.uiobjects); i++) {
-            this.uiobjects[i].draw(this.game_ctx);
-        }
-    
         for(var i = 0; i < this.asteroids_generator.calculate_number_of_asteroids(); i++) {
             if(this.asteroids_generator.asteroids[i].exists == true){
                 this.asteroids_generator.asteroids[i].draw(this.game_ctx);
@@ -323,12 +316,10 @@ class Game {
             }
             if(this.asteroids_generator.asteroids[i].x < 0) {
                 this.asteroids_generator.asteroids[i].exists = false;
-                //this.asteroids_generator.asteroids.splice(i, 1);
             }
         }
         this.playerobject.draw(this.game_ctx);
         this.playerobject.draw_health_bar(this.game_ctx);
-        //game.context.clearRect(0, 0, game.canvas.width, game.canvas.height);
         window.requestAnimationFrame(this.animation.bind(this));
     }
     update() {

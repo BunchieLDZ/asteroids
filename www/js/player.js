@@ -120,9 +120,9 @@ class Player extends GameObject {
         }
     }
     back_to_mortality() {
-        setInterval(this.make_immune_again.bind(this), 2500);
+        setInterval(this.make_mortal_again.bind(this), 2500);
     }
-    make_immune_again() {
+    make_mortal_again() {
         if(this.is_immune == true) {
         this.is_immune = false;
         }
